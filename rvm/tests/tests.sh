@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROGRAMS_ROOT_DIR="programs/"
+PROGRAMS_ROOT_DIR="../programs/"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'

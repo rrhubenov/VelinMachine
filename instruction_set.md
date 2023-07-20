@@ -19,7 +19,6 @@ D: STORE SRC ADDR | Store word (32 bits)
 2: ADD DST, S1, S2 | Add            
 8: SUB DST, S1, S2 | Subtract       
 9: MUL DST, S1, S2 | Multiply       
-A: CMP S1 S2       | Compare and set bits in PSW (flags register) 
 
 ## Shifts
 LSL DST, S1, S2 | Logical shift left    TODO!
@@ -31,7 +30,7 @@ LSR DST, S1, S2 | Logical shift rigth   TODO!
 6: NOT DST         | Boolean NOT # Inverts the bits of DST      
 
 ## Comparison
-
+A: CMP S1 S2       | Compare and set bits in PSW (flags register) 
 
 ## Branching
 // Използва първия бит на PSW регистъра
