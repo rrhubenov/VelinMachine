@@ -89,14 +89,14 @@ struct instr1r {
     uint8_t reg1;
     uint8_t __;
     uint8_t ___;
-}
+};
 
 struct instr2r {
     uint8_t _;
     uint8_t reg1;
     uint8_t reg2;
-    uint8_t _;
-}
+    uint8_t __;
+};
 
 void check_err(int, const char*);
 void check_err(int status_code, const char* message) {
@@ -117,8 +117,8 @@ void unset_bit(uint32_t* target, uint8_t bit) {
     *target = (*target) & ~(mask << bit);
 }
 
-void get_bit(uint32_t target, uint8_t bit);
-void get_bit(uint32_t target, uint8_t bit) {
+uint32_t get_bit(uint32_t target, uint8_t bit);
+uint32_t get_bit(uint32_t target, uint8_t bit) {
     uint32_t mask = 1;
     return target & (mask << bit);
 }
@@ -173,6 +173,7 @@ void execute(const struct instr* i) {
         const struct instr3r* real_i = (const struct instr3r*) (i);
         registers[real_i->reg1] = registers[real_i->reg2] * registers[real_i->reg3]; 
     } else if(op == OP_CMP) {
+        const struct instr2r* real_i = (const struct instr2r*) (i);
         if(registers[real_i->reg1] == registers[real_i->reg2]) {
             set_bit(&registers[REG_PSW], CMP_BIT);
         } else {
@@ -237,7 +238,7 @@ int main(int argc, char** argv) {
     }
 
     // Halt instruction
-    struct instr instruction;
+    struct instr* instruction;
 
     if(read(fd, &RAM, file_info.st_size) == -1) {
         errx(errCode++, "Error reading input file");
@@ -246,11 +247,11 @@ int main(int argc, char** argv) {
     close(fd);
 
     while(1) {
-        instruction = *(struct instr*) &RAM[PC];
+        instruction = (struct instr*) &RAM[PC];
+        execute(instruction); 
         if(debugFlag) {
-            print_debug_info(&instruction);
+            print_debug_info(instruction);
         }
-        execute(&instruction); 
         PC++;
     }
 
