@@ -20,8 +20,8 @@ RM?=        	rm -f
 
 BUILD_DIR=		build/
 
-PROG=			${BUILD_DIR}main
-OBJS=			${BUILD_DIR}main.o
+PROG=			${BUILD_DIR}vm
+OBJS=			${BUILD_DIR}vm.o
 SRCS=			main.c
 
 all:			${PROG}

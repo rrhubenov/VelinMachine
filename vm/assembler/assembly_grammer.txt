@@ -1,7 +1,0 @@
-<instruction> ::= <opcode> <name> <arg>*
-<opcode> ::= [0-255]
-<name> ::= [A-Za-z0-9]+
-<arg> ::= (1 | 2 | 3)
-
-sum(<arg>*) <= 3
-
