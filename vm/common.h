@@ -4,5 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <err.h>
+#include <assert.h>
 
 #endif

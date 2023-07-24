@@ -21,4 +21,14 @@ uint32_t get_bit(uint32_t target, uint8_t bit) {
     return target & (mask << bit);
 }
 
+uint8_t get_1byte(uint32_t from, uint8_t pos) {
+    assert(pos <= 3);
+    return (uint8_t) (from << pos*8);
+}
+
+uint16_t get_2byte(uint32_t from, uint8_t pos) {
+    assert(pos <= 2);
+    return (uint16_t) (from << pos*8);
+}
+
 

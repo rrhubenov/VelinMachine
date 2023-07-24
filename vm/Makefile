@@ -48,6 +48,6 @@ clean:
 # Info on gcc -MM: https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
 
 # Implicit rules. Make knows how go build .o files
-debug.o: debug.c debug.h common.h bytecode.h
+debug.o: debug.c debug.h common.h bytecode.h utils.h
 main.o: main.c bytecode.h common.h debug.h utils.h
-utils.o: utils.c utils.h common.h	
+utils.o: utils.c utils.h common.h
