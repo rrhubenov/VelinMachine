@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <err.h>
@@ -9,28 +11,12 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-#define increment(i) (i++)
+#include "bytecode.h"
+#include "debug.h"
+#include "utils.h"
 
 #define PROGRAM_SIZE_LIMIT 1024
-
-//// OPCODES
-
-#define OP_LOADI 0x1
-#define OP_ADD   0x2
-#define OP_PRNT  0x3
-#define OP_AND   0x4
-#define OP_OR    0x5
-#define OP_NOT   0x6
-#define OP_JNE   0x7
-#define OP_SUB   0x8
-#define OP_MUL   0x9
-#define OP_CMP   0xA
-#define OP_JEQ   0xB
-#define OP_LOAD  0xC
-#define OP_STORE 0xD
-#define OP_HALT  0xFF
-#define OP_NOOP  0x0
-
+#define REGISTER_COUNT 16
 
 //// Register IDs in array
 ///
@@ -47,81 +33,13 @@
 uint32_t JNE_MASK = 1;
 uint8_t CMP_BIT = 0;
 
-
-////
-
-char debug_symbols[256][10] = { "NONE", "LOADI", "ADD", "PRNT", "AND", "OR", "NOT", "JNE", "SUB", "MUL", "CMP"};
-
 int errCode = 1;
 
 // Program counter
 uint16_t PC = 0;
 
-uint32_t registers[16];
+uint32_t registers[REGISTER_COUNT];
 uint32_t RAM[1LL << 16]; // 2 ^ 16
-
-struct instr {
-    // byte1
-    uint8_t opcode;
-    // byte2
-    uint8_t b2;
-    // byte3
-    uint8_t b3;
-    // byte4
-    uint8_t b4;
-};
-
-struct __attribute__((__packed__)) instr1r1v {
-    uint8_t _;
-    uint8_t reg;
-    uint16_t val;
-};
-
-struct instr3r {
-    uint8_t _;
-    uint8_t reg1;
-    uint8_t reg2;
-    uint8_t reg3;
-};
-
-struct instr1r {
-    uint8_t _;
-    uint8_t reg1;
-    uint8_t __;
-    uint8_t ___;
-};
-
-struct instr2r {
-    uint8_t _;
-    uint8_t reg1;
-    uint8_t reg2;
-    uint8_t __;
-};
-
-void check_err(int, const char*);
-void check_err(int status_code, const char* message) {
-    if(status_code == -1) {
-        err(increment(errCode), "%s", message);
-    }
-}
-
-void set_bit(uint32_t*, uint8_t);
-void set_bit(uint32_t* target, uint8_t bit) {
-    uint32_t mask = 1;
-    *target = (*target) | (mask << bit);
-}
-
-void unset_bit(uint32_t* target, uint8_t bit);
-void unset_bit(uint32_t* target, uint8_t bit) {
-    uint32_t mask = 1;
-    *target = (*target) & ~(mask << bit);
-}
-
-uint32_t get_bit(uint32_t target, uint8_t bit);
-uint32_t get_bit(uint32_t target, uint8_t bit) {
-    uint32_t mask = 1;
-    return target & (mask << bit);
-}
 
 void init_regs(void);
 void init_regs(void) {
@@ -189,15 +107,7 @@ void execute(const struct instr* i) {
         uint16_t addr = real_i->val + PROGRAM_SIZE_LIMIT;
         RAM[addr] = val; 
     } else {
-        errx(increment(errCode), "Unknown op: %X", op);
-    }
-}
-
-void print_debug_info(const struct instr*);
-void print_debug_info(const struct instr* instruction) {
-    printf("OP: %x, byte1: %x, byte2: %x, byte3: %x\n", instruction->opcode, instruction->b2, instruction->b3, instruction->b4);
-    for(int i = 0; i < 16; i++) {
-        printf("reg%d: %x\n", i, registers[i]); 
+        errx(1, "Unknown op: %X", op);
     }
 }
 
@@ -206,7 +116,7 @@ uint8_t debugFlag = 0;
 int main(int argc, char** argv) {
 
     if(argc < 2) {
-        errx(increment(errCode), "Expected binary file. Use provided assembler");
+        errx(1, "Expected binary file. Use provided assembler");
     }
 
     // Debug flag is given
@@ -214,12 +124,13 @@ int main(int argc, char** argv) {
         if(!strcmp(argv[2], "-d")) {
             debugFlag = 1; 
         } else {
-            errx(increment(errCode), "3 arguments were given but the second was not -d"); 
+            errx(1, "3 arguments were given but the second was not -d"); 
         }
     }
 
     // Set all registers to 0
     init_regs();
+    init_debug();
 
     // Open binary file
     int fd;
@@ -250,12 +161,11 @@ int main(int argc, char** argv) {
         instruction = (struct instr*) &RAM[PC];
         execute(instruction); 
         if(debugFlag) {
-            print_debug_info(instruction);
+            d_instr(instruction, PC);
+            print_internal_state(registers, REGISTER_COUNT);
         }
         PC++;
     }
 
 }
-
-
 
