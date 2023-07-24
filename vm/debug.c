@@ -7,7 +7,7 @@
 static const char* op_to_s_map[256];
 
 void d_instr(struct instr* i, uint32_t offset) {
-    printf("%X ", offset); 
+    printf("%04X ", offset); 
     const char* op_name = b_to_s(i->opcode);
     printf("%s ", op_name);
 
@@ -62,8 +62,9 @@ void d_instr(struct instr* i, uint32_t offset) {
 }
 
 void print_internal_state(uint32_t* registers, uint8_t count) {
-    for(int i = 0; i < count; i++) {
-        printf("reg%d: %x\n", i, registers[i]); 
+    for(int i = 0; i < count/2; i++) {
+        printf("reg%d: %04x", i, registers[i]); 
+        printf("\treg%d: %04X\n", i+(count/2), registers[i+(count/2)]);
     }
 }
 
@@ -93,76 +94,75 @@ const char*b_to_s(uint8_t opcode) {
 void d_noop() {}
 
 void d_loadi(struct instr* i) {
-    printf("DST: %X, CNST: %X", i->b2, *(uint16_t*) &(i->b3));
+    printf("DST: %02X, CNST: %04X", i->b2, *(uint16_t*) &(i->b3));
 }
 
 void d_add(struct instr* i) {
-    printf("DST: %X, SRC1: %X, SRC2: %X",
+    printf("DST: %02X, SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3,
             i->b4);
 }
 
 void d_prnt(struct instr* i) {
-    //printf("SRC: %X", i->b2);
-    printf("SRC: %X", i->b2);
+    printf("SRC: %02X", i->b2);
 }
 
 void d_and(struct instr* i) {
-    printf("DST: %X, SRC1: %X, SRC2: %X",
+    printf("DST: %02X, SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3,
             i->b4);
 }
 
 void d_or(struct instr* i) {
-    printf("DST: %X, SRC1: %X, SRC2: %X",
+    printf("DST: %02X, SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3,
             i->b4);
 }
 
 void d_not(struct instr* i) {
-    printf("DST: %X",
+    printf("DST: %02X",
             i->b2);
 }
 
 void d_sub(struct instr* i) {
-    printf("DST: %X, SRC1: %X, SRC2: %X",
+    printf("DST: %02X, SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3,
             i->b4);
 }
 
 void d_mul(struct instr* i) {
-    printf("DST: %X, SRC1: %X, SRC2: %X",
+    printf("DST: %02X, SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3,
             i->b4);
 }
 
 void d_jne(struct instr* i) {
-    printf("DST: %X",
+    printf("DST: %04X",
             *(uint16_t*)&i->b2);
 }
 
 void d_cmp(struct instr* i) {
-    printf("SRC1: %X, SRC2: %X",
+    printf("SRC1: %02X, SRC2: %02X",
             i->b2,
             i->b3);
 }
 
 void d_jeq(struct instr* i) {
-    printf("DST: %X",
+    printf("DST: %04X",
             *(uint16_t*)&i->b2);
 }
 
 void d_load(struct instr* i) {
-    printf("DST: %X, ADDR: %X", i->b2, *(uint16_t*)&i->b3);
+    printf("DST: %02X, ADDR: %04X", i->b2, *(uint16_t*)&i->b3);
 }
 
 void d_store(struct instr* i) {
-    printf("SRC: %X, ADDR: %X", i->b2, *(uint16_t*)&i->b3);
+    printf("SRC: %02X, ADDR: %04X", i->b2, *(uint16_t*)&i->b3);
 }
 
 void d_halt() {}
