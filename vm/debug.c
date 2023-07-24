@@ -2,14 +2,12 @@
 
 #include "debug.h"
 
-
-static char* op_to_s_map[256];
+static const char* op_to_s_map[256];
 
 void d_instr(struct instr* i, uint32_t offset) {
     printf("%X ", offset);
 
-    char op_name[10];
-    b_to_s(i->opcode, op_name);
+    const char* op_name = b_to_s(i->opcode);
 
     printf("%s %X %X %X\n", op_name, i->b2, i->b3, i->b4);
 }
@@ -38,7 +36,7 @@ void init_debug() {
     op_to_s_map[0xFF] = "HALT";
 }
 
-void b_to_s(uint8_t opcode, char* buf) {
-    buf = op_to_s_map[opcode];
+const char* b_to_s(uint8_t opcode) {
+    return op_to_s_map[opcode];
 }
 

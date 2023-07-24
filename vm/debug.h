@@ -6,7 +6,7 @@
 
 
 void init_debug(void);
-void b_to_s(uint8_t opcode, char* buf);
+const char* b_to_s(uint8_t opcode);
 
 // Disassemble instruction
 void d_instr(struct instr*, uint32_t);
