@@ -18,6 +18,8 @@
 #define OP_STORE 0xD
 #define OP_HALT  0xFF
 #define OP_NOOP  0x0
+#define OP_LSL   0xE
+#define OP_LSR   0xF
 
 //char debug_symbols[256][10] = { "NONE", "LOADI", "ADD", "PRNT", "AND", "OR", "NOT", "JNE", "SUB", "MUL", "CMP"};
 

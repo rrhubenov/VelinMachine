@@ -21,8 +21,8 @@ D: STORE SRC ADDR | Store word (32 bits)
 9: MUL DST, S1, S2 | Multiply       
 
 ## Shifts
-LSL DST, S1, S2 | Logical shift left    TODO!
-LSR DST, S1, S2 | Logical shift rigth   TODO!
+E: LSL DST     | Logical shift left    TODO!
+F: LSR DST     | Logical shift rigth   TODO!
 
 ## Boolean
 4: AND DST, S1, S2 | Boolean AND                                
@@ -34,8 +34,8 @@ A: CMP S1 S2       | Compare and set bits in PSW (flags register)
 
 ## Branching
 // Използва първия бит на PSW регистъра
-7: JNE DST         | Jump to destination if zero flag IS NOT set
-B: JEQ DST         | Jump to destination if zero flag IS set    
+7: JNE DST         | Jump to destination if zero flag IS NOT set | (2,0) -> 2 bytes for DST
+B: JEQ DST         | Jump to destination if zero flag IS set     | (2,0) -> 2 bytes for DST
 
 
 ## Misc

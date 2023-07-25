@@ -193,6 +193,12 @@ register_OP_1_2(LOAD)
 STORE = Instruction("STORE", 2, 13)
 register_OP_1_2(STORE)
 
+LSL = Instruction("LSL", 1, 14)
+register_OP_1_0_0(LSL)
+
+LSR = Instruction("LSR", 1, 15)
+register_OP_1_0_0(LSR)
+
 #####
 
 

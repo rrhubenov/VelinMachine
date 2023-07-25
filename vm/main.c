@@ -106,6 +106,12 @@ void execute(const struct instr* i) {
         uint32_t val = registers[real_i->reg];
         uint16_t addr = real_i->val + PROGRAM_SIZE_LIMIT;
         RAM[addr] = val; 
+    } else if(op == OP_LSL) {
+        const struct instr3r* real_i = (const struct instr3r*) (i);
+        registers[real_i->reg1] = registers[real_i->reg1] << 1;
+    } else if(op == OP_LSR) {
+        const struct instr3r* real_i = (const struct instr3r*) (i);
+        registers[real_i->reg1] = registers[real_i->reg1] >> 1;
     } else {
         errx(1, "Unknown op: %X", op);
     }

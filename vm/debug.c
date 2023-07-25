@@ -57,6 +57,12 @@ void d_instr(struct instr* i, uint32_t offset) {
         case OP_NOOP:
             d_noop();
             break;
+        case OP_LSL:
+            d_lsl(i);
+            break;
+        case OP_LSR:
+            d_lsr(i);
+            break;
     }
     printf("\n");
 }
@@ -166,4 +172,14 @@ void d_store(struct instr* i) {
 }
 
 void d_halt() {}
+
+void d_lsl(struct instr* i) {
+    printf("DST: %02X",
+            i->b2);
+}
+
+void d_lsr(struct instr* i) {
+    printf("DST: %02X",
+            i->b2);
+}
 

@@ -27,5 +27,7 @@ void d_jeq(struct instr*);
 void d_load(struct instr*);
 void d_store(struct instr*);
 void d_halt(void);
+void d_lsl(struct instr*);
+void d_lsr(struct instr*);
 
 #endif

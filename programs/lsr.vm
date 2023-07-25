@@ -1,0 +1,4 @@
+LOADI 1 2
+LSR 1
+PRNT 1
+HLT
