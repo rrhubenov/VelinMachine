@@ -202,6 +202,10 @@ register_OP_1_0_0(LSR)
 #####
 
 
+def remove_comments(line) -> str:
+    return line.split("#")[0]
+
+
 def gen_byte_code(op, args) -> bytes:
 
     # Two bytes
@@ -228,6 +232,7 @@ with open(sys.argv[1], 'rt') as f:
     result = bytes()
 
     for line in lines:
+        line = remove_comments(line)
         line = line.strip()
         if line == "":
             continue
