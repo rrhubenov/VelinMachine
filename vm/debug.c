@@ -75,6 +75,7 @@ void print_internal_state(uint32_t* registers, uint8_t count) {
 }
 
 
+// Can be implemented using designated initializers
 void init_debug() {
     op_to_s_map[0] = "NOOP";
     op_to_s_map[1] = "LOADI";

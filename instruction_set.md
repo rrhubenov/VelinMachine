@@ -21,8 +21,8 @@ D: STORE SRC ADDR | Store word (32 bits)
 9: MUL DST, S1, S2 | Multiply       
 
 ## Shifts
-E: LSL DST     | Logical shift left    TODO!
-F: LSR DST     | Logical shift rigth   TODO!
+E: LSL DST     | Logical shift left    
+F: LSR DST     | Logical shift rigth  
 
 ## Boolean
 4: AND DST, S1, S2 | Boolean AND                                
@@ -31,6 +31,7 @@ F: LSR DST     | Logical shift rigth   TODO!
 
 ## Comparison
 A: CMP S1 S2       | Compare and set bits in PSW (flags register) 
+?: CMPI S1 CNST    | Compare value in S1 with constanst and set bits in PSW
 
 ## Branching
 // Използва първия бит на PSW регистъра
@@ -50,7 +51,12 @@ CNST: register for loading constants
 0 - PSW (Program Status Word) 32 bit register that is used for flags
 1 - 5 GP Registers
 
+# To be added
+Need a "mov" instruction to move (or copy) a value from one register
+to another.
 
+Need an easy way to add, subtract, multiply to a register with
+immediate values. The current versions use only registers.
 
 
 

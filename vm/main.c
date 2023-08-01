@@ -18,17 +18,6 @@
 #define PROGRAM_SIZE_LIMIT 1024
 #define REGISTER_COUNT 16
 
-//// Register IDs in array
-///
-/// Use these values to access the registers in the registers array
-
-#define REG_PSW 0 // Program Status Word register
-#define REG_GP1 1 // General Purpose 1
-#define REG_GP2 2 // General Purpose 2
-#define REG_GP3 3 // General Purpose 3
-#define REG_GP4 4 // General Purpose 4
-#define REG_GP5 5 // General Purpose 5
-
 //// Masks
 uint32_t JNE_MASK = 1;
 uint8_t CMP_BIT = 0;
@@ -38,7 +27,10 @@ int errCode = 1;
 // Program counter
 uint16_t PC = 0;
 
-uint32_t registers[REGISTER_COUNT];
+// Could be initialized with a designated initializer but ISO C forbids it...
+// All registers are general purpose for now
+uint32_t registers[REGISTER_COUNT];  // = { [0 ... REGISTER_COUNT - 1] = 0 }
+uint32_t PSW; // Pragram Status Word (flags)
 uint32_t RAM[1LL << 16]; // 2 ^ 16
 
 void init_regs(void);
@@ -74,13 +66,13 @@ void execute(const struct instr* i) {
         exit(0);
     } else if(op == OP_JNE) {
         const struct instr1r* real_i = (const struct instr1r*) (i);
-        if(!get_bit(registers[REG_PSW], CMP_BIT)) {
+        if(!get_bit(PSW, CMP_BIT)) {
             // PC must be set to (DEST - 1) since it gets incremented after every instruction
             PC = real_i->reg1 - 1;
         } 
     } else if(op == OP_JEQ) {
         const struct instr1r* real_i = (const struct instr1r*) (i);
-        if(get_bit(registers[REG_PSW], CMP_BIT)) {
+        if(get_bit(PSW, CMP_BIT)) {
             // PC must be set to (DEST - 1) since it gets incremented after every instruction
             PC = real_i->reg1 - 1;
         } 
@@ -93,9 +85,9 @@ void execute(const struct instr* i) {
     } else if(op == OP_CMP) {
         const struct instr2r* real_i = (const struct instr2r*) (i);
         if(registers[real_i->reg1] == registers[real_i->reg2]) {
-            set_bit(&registers[REG_PSW], CMP_BIT);
+            set_bit(&PSW, CMP_BIT);
         } else {
-            unset_bit(&registers[REG_PSW], CMP_BIT);
+            unset_bit(&PSW, CMP_BIT);
         }
     } else if(op == OP_LOAD) {
         const struct instr1r1v* real_i = (const struct instr1r1v*) (i);
