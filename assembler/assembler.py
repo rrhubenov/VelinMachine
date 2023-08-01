@@ -4,6 +4,8 @@ import sys
 
 linenum = 0
 
+
+
 class Instruction:
     def __init__(self, name: str, arg_count: int, opcode: int):
         self.name=name
